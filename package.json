@@ -10,7 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.13.0",
+    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^5.15.0",
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.395.0",
