@@ -1,9 +1,9 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import Chatbot from "./components/Chatbot";
 import Footer from "./components/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700", "800"] });
 
 export const metadata = {
   title: "Ashoka Motors | Official Yamaha Dealership in Hyderabad",
@@ -21,7 +21,6 @@ export const metadata = {
 
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "./components/ThemeProvider";
-import ThemeToggle from "./components/ThemeToggle";
 
 export default function RootLayout({
   children,
@@ -30,18 +29,28 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <body className={outfit.className} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <ThemeProvider>
           <nav className="navbar">
             <div className="nav-container">
               <h1 className="logo">Ashoka Motors</h1>
-              <ul className="nav-links">
+              <ul className="nav-links" style={{ alignItems: 'center' }}>
                 <li><a href="/">Home</a></li>
                 <li><a href="/vehicles">Vehicles</a></li>
                 <li><a href="/about">About</a></li>
-                <li><a href="/ai-recommend" style={{ color: 'var(--yamaha-blue)', fontWeight: 'bold' }}>AI Recommend</a></li>
                 <li><a href="/contact">Contact</a></li>
-                <li><ThemeToggle /></li>
+                <li>
+                  <a href="/ai-recommend" style={{ 
+                    background: 'var(--accent-gradient)', 
+                    color: 'white', 
+                    padding: '0.6rem 1.2rem', 
+                    borderRadius: '30px', 
+                    fontWeight: '600',
+                    boxShadow: '0 4px 15px rgba(0, 210, 255, 0.3)'
+                  }}>
+                    ✨ AI Matchmaker
+                  </a>
+                </li>
               </ul>
             </div>
           </nav>

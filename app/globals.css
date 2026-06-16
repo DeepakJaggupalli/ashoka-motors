@@ -1,25 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   --yamaha-blue: #046bd2;
-  --yamaha-dark-blue: #045cb4;
-  --yamaha-black: #111111;
-  --yamaha-white: #ffffff;
-  --text-color: #333333;
-  --background: #f8f9fa;
-  --navbar-bg: #1e293b;
-  --card-bg: #ffffff;
-  --border-color: #eee;
-}
-
-[data-theme='dark'] {
-  --yamaha-blue: #3b82f6;
-  --yamaha-dark-blue: #2563eb;
-  --yamaha-black: #f8f9fa;
-  --yamaha-white: #0f172a;
-  --text-color: #f1f5f9;
-  --background: #0f172a;
-  --navbar-bg: #020617;
-  --card-bg: #1e293b;
-  --border-color: #334155;
+  --yamaha-cyan: #00d2ff;
+  --yamaha-dark-blue: #1e3a8a;
+  --bg-color: #020617;
+  --surface-color: rgba(30, 41, 59, 0.7);
+  --surface-border: rgba(255, 255, 255, 0.1);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-gradient: linear-gradient(135deg, #046bd2 0%, #00d2ff 100%);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-backdrop: blur(12px);
 }
 
 * {
@@ -29,11 +21,16 @@
 }
 
 html, body {
-  max-width: 100vw;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Outfit', sans-serif;
   overflow-x: hidden;
-  background-color: var(--background);
-  color: var(--text-color);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  min-height: 100vh;
+  /* Add subtle background grid or glow */
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(4, 107, 210, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(0, 210, 255, 0.1), transparent 25%);
+  background-attachment: fixed;
 }
 
 a {
@@ -41,11 +38,15 @@ a {
   color: inherit;
 }
 
+/* Glassmorphic Navbar */
 .navbar {
-  background-color: var(--navbar-bg);
-  color: var(--yamaha-white);
-  padding: 1rem 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: rgba(2, 6, 23, 0.7);
+  backdrop-filter: var(--glass-backdrop);
+  border-bottom: 1px solid var(--surface-border);
+  padding: 1.2rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .nav-container {
@@ -57,63 +58,158 @@ a {
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
+}
+
+.nav-links a {
+  font-weight: 500;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .nav-links a:hover {
-  color: var(--yamaha-blue);
-  transition: color 0.3s ease;
+  color: var(--text-primary);
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background: var(--accent-gradient);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
 }
 
 .main-container {
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
 }
 
+/* Dynamic Hero Section */
 .hero-section {
   text-align: center;
-  padding: 6rem 2rem;
-  background-color: var(--yamaha-blue);
-  color: var(--yamaha-white);
+  padding: 8rem 2rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .hero-section h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 4.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  background: linear-gradient(to right, #ffffff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-section p {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 3rem;
 }
 
+/* Glassmorphic Components */
+.glass-panel {
+  background: var(--surface-color);
+  backdrop-filter: var(--glass-backdrop);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 16px;
+}
+
+/* Premium Buttons */
 .cta-button {
-  background-color: var(--yamaha-black);
-  color: var(--yamaha-white);
+  background: var(--accent-gradient);
+  color: white;
   border: none;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  border-radius: 4px;
+  border-radius: 50px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(4, 107, 210, 0.4);
 }
 
 .cta-button:hover {
-  background-color: #333333;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(4, 107, 210, 0.6);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--yamaha-blue);
+}
+
+/* Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(4, 107, 210, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(4, 107, 210, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(4, 107, 210, 0); }
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* AI Chatbot specific styles */
+.chat-bubble-ai {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.chat-bubble-user {
+  background: var(--accent-gradient) !important;
+  box-shadow: 0 4px 6px rgba(4, 107, 210, 0.3);
+}
+
+/* Typewriter cursor effect */
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
 }
