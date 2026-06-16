@@ -1,7 +1,15 @@
+"use client";
+import { motion } from 'framer-motion';
+
 export default function About() {
   return (
     <main className="main-container" style={{ padding: '4rem 2rem', alignItems: 'center' }}>
-      <div style={{ maxWidth: '800px', width: '100%', backgroundColor: 'white', padding: '3rem', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        style={{ maxWidth: '800px', width: '100%', backgroundColor: 'white', padding: '3rem', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}
+      >
         <h1 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', color: '#046bd2' }}>About Ashoka Motors</h1>
         <p style={{ fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#334155' }}>
           Welcome to Ashoka Motors, the premier Yamaha dealership in Hyderabad and Secunderabad. Established with a passion for exceptional two-wheelers, we have been serving the riding community with dedication and excellence.
@@ -16,7 +24,7 @@ export default function About() {
           <li>Genuine Yamaha Spare Parts & Accessories</li>
           <li>Easy Financing Options</li>
         </ul>
-      </div>
+      </motion.div>
     </main>
   );
 }

@@ -1,13 +1,13 @@
 import Link from 'next/link';
+import { PrismaClient } from '@prisma/client';
 
-// Mock data until Prisma is seeded
-const vehicles = [
-  { id: 1, name: 'Yamaha R15 V4', type: 'Sports', price: 182000, imageUrl: 'https://via.placeholder.com/400x250?text=Yamaha+R15+V4' },
-  { id: 2, name: 'Yamaha MT-15 V2', type: 'Naked', price: 168000, imageUrl: 'https://via.placeholder.com/400x250?text=Yamaha+MT-15+V2' },
-  { id: 3, name: 'Yamaha FZ-S FI V4', type: 'Street', price: 129000, imageUrl: 'https://via.placeholder.com/400x250?text=Yamaha+FZ-S' },
-];
+const prisma = new PrismaClient();
 
-export default function Vehicles() {
+export const dynamic = 'force-dynamic';
+
+export default async function Vehicles() {
+  const vehicles = await prisma.vehicle.findMany();
+
   return (
     <main className="main-container" style={{ padding: '4rem 2rem' }}>
       <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Our Vehicles</h1>

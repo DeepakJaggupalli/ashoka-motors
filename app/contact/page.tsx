@@ -1,17 +1,33 @@
 "use client";
-
 import { useState } from 'react';
 
 export default function Contact() {
   const [status, setStatus] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('Sending...');
-    // Mock API call
-    setTimeout(() => {
-      setStatus('Message sent successfully! We will get back to you soon.');
-    }, 1500);
+    const formData = new FormData(e.currentTarget);
+    
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.get('name'),
+          email: formData.get('email'),
+          message: formData.get('message')
+        })
+      });
+      if (res.ok) {
+        setStatus('Message sent successfully! We will get back to you soon.');
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setStatus('Error sending message.');
+      }
+    } catch {
+      setStatus('Error sending message.');
+    }
   };
 
   return (
@@ -23,15 +39,15 @@ export default function Contact() {
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Name</label>
-              <input type="text" required style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #cbd5e1' }} />
+              <input name="name" type="text" required style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #cbd5e1' }} />
             </div>
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Email</label>
-              <input type="email" required style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #cbd5e1' }} />
+              <input name="email" type="email" required style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #cbd5e1' }} />
             </div>
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Message</label>
-              <textarea rows={4} required style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #cbd5e1', resize: 'vertical' }} />
+              <textarea name="message" rows={4} required style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #cbd5e1', resize: 'vertical' }} />
             </div>
             <button type="submit" style={{ backgroundColor: '#046bd2', color: 'white', padding: '0.75rem', borderRadius: '6px', border: 'none', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}>
               Send Message

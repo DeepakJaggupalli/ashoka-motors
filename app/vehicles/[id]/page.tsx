@@ -1,16 +1,12 @@
-// Using static generation for mock data
-const vehicles = [
-  { id: '1', name: 'Yamaha R15 V4', type: 'Sports', price: 182000, imageUrl: 'https://via.placeholder.com/800x500?text=Yamaha+R15+V4', specs: '155cc, 18.4 PS, 14.2 Nm, Liquid Cooled' },
-  { id: '2', name: 'Yamaha MT-15 V2', type: 'Naked', price: 168000, imageUrl: 'https://via.placeholder.com/800x500?text=Yamaha+MT-15+V2', specs: '155cc, 18.4 PS, 14.1 Nm, Liquid Cooled' },
-  { id: '3', name: 'Yamaha FZ-S FI V4', type: 'Street', price: 129000, imageUrl: 'https://via.placeholder.com/800x500?text=Yamaha+FZ-S', specs: '149cc, 12.4 PS, 13.3 Nm, Air Cooled' },
-];
+import { PrismaClient } from '@prisma/client';
+import BookingModal from '../../components/BookingModal';
 
-export function generateStaticParams() {
-  return vehicles.map((v) => ({ id: v.id }));
-}
+const prisma = new PrismaClient();
 
-export default function VehicleDetails({ params }: { params: { id: string } }) {
-  const vehicle = vehicles.find(v => v.id === params.id);
+export default async function VehicleDetails({ params }: { params: { id: string } }) {
+  const vehicle = await prisma.vehicle.findUnique({
+    where: { id: parseInt(params.id) }
+  });
 
   if (!vehicle) {
     return <main className="main-container" style={{ padding: '4rem 2rem' }}><h1>Vehicle not found</h1></main>;
@@ -34,9 +30,7 @@ export default function VehicleDetails({ params }: { params: { id: string } }) {
             {vehicle.specs}
           </p>
           
-          <button style={{ width: '100%', backgroundColor: '#046bd2', color: 'white', padding: '1rem', borderRadius: '8px', border: 'none', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', transition: 'background-color 0.3s' }}>
-            Book a Test Ride
-          </button>
+          <BookingModal vehicleName={vehicle.name} />
         </div>
       </div>
     </main>

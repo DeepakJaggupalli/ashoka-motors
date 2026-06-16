@@ -8,22 +8,29 @@ export default function Chatbot() {
     { role: 'ai', text: 'Hi! I am the Ashoka Motors AI assistant. How can I help you find your dream Yamaha bike?' }
   ]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
     
     const userMessage = input;
     setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setInput('');
+    setIsLoading(true);
 
-    // Mock AI response
-    setTimeout(() => {
-      let reply = "I can definitely help with that. Are you looking for a sports bike or a commuter?";
-      if (userMessage.toLowerCase().includes('sports') || userMessage.toLowerCase().includes('r15')) {
-        reply = "The Yamaha R15 V4 is our top-selling sports bike! It features a 155cc liquid-cooled engine and an aerodynamic design. Would you like to know its on-road price?";
-      }
-      setMessages(prev => [...prev, { role: 'ai', text: reply }]);
-    }, 1000);
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage })
+      });
+      const data = await res.json();
+      setMessages(prev => [...prev, { role: 'ai', text: data.reply || "Sorry, I couldn't process that." }]);
+    } catch {
+      setMessages(prev => [...prev, { role: 'ai', text: "Network error. Please try again." }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,11 +68,13 @@ export default function Chatbot() {
                 alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
                 backgroundColor: msg.role === 'user' ? '#046bd2' : '#f1f5f9',
                 color: msg.role === 'user' ? 'white' : '#334155',
-                padding: '0.75rem 1rem', borderRadius: '8px', maxWidth: '85%'
+                padding: '0.75rem 1rem', borderRadius: '8px', maxWidth: '85%',
+                fontSize: '0.95rem', lineHeight: '1.4'
               }}>
                 {msg.text}
               </div>
             ))}
+            {isLoading && <div style={{ alignSelf: 'flex-start', color: '#888', fontStyle: 'italic', fontSize: '0.8rem' }}>AI is typing...</div>}
           </div>
 
           <div style={{ padding: '1rem', borderTop: '1px solid #e2e8f0', display: 'flex', gap: '0.5rem' }}>
@@ -77,7 +86,7 @@ export default function Chatbot() {
               placeholder="Ask me about bikes..."
               style={{ flex: 1, padding: '0.5rem', borderRadius: '4px', border: '1px solid #cbd5e1' }}
             />
-            <button onClick={handleSend} style={{ backgroundColor: '#046bd2', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+            <button onClick={handleSend} disabled={isLoading} style={{ backgroundColor: isLoading ? '#94a3b8' : '#046bd2', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
               Send
             </button>
           </div>
