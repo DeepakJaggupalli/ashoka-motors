@@ -50,9 +50,9 @@ export default function AIRecommend() {
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Height</label>
               <select name="height" required style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--background)', color: 'var(--text-color)' }}>
                 <option value="">Select Height</option>
-                <option value="Under 5'4\"">Under 5'4"</option>
-                <option value="5'4\" - 5'9\"">5'4" - 5'9"</option>
-                <option value="Over 5'9\"">Over 5'9"</option>
+                <option value="Under 5.4">Under 5'4&quot;</option>
+                <option value="5.4 - 5.9">5'4&quot; - 5'9&quot;</option>
+                <option value="Over 5.9">Over 5'9&quot;</option>
               </select>
             </div>
             <div>
