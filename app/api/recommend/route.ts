@@ -47,7 +47,8 @@ export async function POST(req: Request) {
     `;
     
     const result = await model.generateContent(prompt);
-    const text = result.response.text();
+    let text = result.response.text();
+    text = text.replace(/```json/g, '').replace(/```/g, '').trim();
     const data = JSON.parse(text);
 
     // Find the vehicle image
