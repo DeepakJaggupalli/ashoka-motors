@@ -6,6 +6,20 @@
   --text-color: #333333;
   --background: #f8f9fa;
   --navbar-bg: #1e293b;
+  --card-bg: #ffffff;
+  --border-color: #eee;
+}
+
+[data-theme='dark'] {
+  --yamaha-blue: #3b82f6;
+  --yamaha-dark-blue: #2563eb;
+  --yamaha-black: #f8f9fa;
+  --yamaha-white: #0f172a;
+  --text-color: #f1f5f9;
+  --background: #0f172a;
+  --navbar-bg: #020617;
+  --card-bg: #1e293b;
+  --border-color: #334155;
 }
 
 * {

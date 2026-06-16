@@ -24,6 +24,7 @@ model ContactMessage {
   name      String
   email     String
   message   String
+  status    String   @default("PENDING")
   createdAt DateTime @default(now())
 }
 
@@ -33,6 +34,7 @@ model TestRideBooking {
   phone       String
   date        String
   vehicleName String
+  status      String   @default("PENDING")
   createdAt   DateTime @default(now())
 }
 

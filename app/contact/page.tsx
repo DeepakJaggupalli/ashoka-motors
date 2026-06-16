@@ -1,32 +1,41 @@
 "use client";
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function Contact() {
-  const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('Sending...');
+    setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     
+    const promise = fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message')
+      })
+    }).then(async (res) => {
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res;
+    });
+
+    toast.promise(promise, {
+      loading: 'Sending message...',
+      success: 'Message sent successfully! We will get back to you soon.',
+      error: 'Error sending message. Please try again.',
+    });
+
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.get('name'),
-          email: formData.get('email'),
-          message: formData.get('message')
-        })
-      });
-      if (res.ok) {
-        setStatus('Message sent successfully! We will get back to you soon.');
-        (e.target as HTMLFormElement).reset();
-      } else {
-        setStatus('Error sending message.');
-      }
-    } catch {
-      setStatus('Error sending message.');
+      await promise;
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      // Error handled by toast
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -49,10 +58,9 @@ export default function Contact() {
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Message</label>
               <textarea name="message" rows={4} required style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #cbd5e1', resize: 'vertical' }} />
             </div>
-            <button type="submit" style={{ backgroundColor: '#046bd2', color: 'white', padding: '0.75rem', borderRadius: '6px', border: 'none', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}>
-              Send Message
+            <button type="submit" disabled={isSubmitting} style={{ backgroundColor: isSubmitting ? '#94a3b8' : '#046bd2', color: 'white', padding: '0.75rem', borderRadius: '6px', border: 'none', fontSize: '1rem', fontWeight: 'bold', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'background-color 0.3s' }}>
+              {isSubmitting ? 'Sending...' : 'Send Message'}
             </button>
-            {status && <p style={{ marginTop: '1rem', color: status.includes('success') ? '#16a34a' : '#046bd2' }}>{status}</p>}
           </form>
         </div>
 

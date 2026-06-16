@@ -1,34 +1,43 @@
 "use client";
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function BookingModal({ vehicleName }: { vehicleName: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('Submitting...');
+    setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     
+    const promise = fetch('/api/book-ride', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: formData.get('name'),
+        phone: formData.get('phone'),
+        date: formData.get('date'),
+        vehicleName
+      })
+    }).then(async (res) => {
+      if (!res.ok) throw new Error('Network error');
+      return res;
+    });
+
+    toast.promise(promise, {
+      loading: 'Confirming booking...',
+      success: 'Test Ride successfully booked!',
+      error: 'Error booking test ride.',
+    });
+
     try {
-      const res = await fetch('/api/book-ride', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.get('name'),
-          phone: formData.get('phone'),
-          date: formData.get('date'),
-          vehicleName
-        })
-      });
-      if (res.ok) {
-        setStatus('Booking confirmed!');
-        setTimeout(() => { setIsOpen(false); setStatus(''); }, 2000);
-      } else {
-        setStatus('Error booking test ride.');
-      }
+      await promise;
+      setTimeout(() => setIsOpen(false), 1000);
     } catch {
-      setStatus('Error booking test ride.');
+      // Handled by toast
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -46,9 +55,10 @@ export default function BookingModal({ vehicleName }: { vehicleName: string }) {
               <input name="name" required placeholder="Your Name" style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }} />
               <input name="phone" required placeholder="Your Phone Number" style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }} />
               <input name="date" type="date" required style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }} />
-              <button type="submit" style={{ backgroundColor: '#111', color: 'white', padding: '0.75rem', borderRadius: '4px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Submit Booking</button>
+              <button type="submit" disabled={isSubmitting} style={{ backgroundColor: isSubmitting ? '#666' : '#111', color: 'white', padding: '0.75rem', borderRadius: '4px', border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}>
+                {isSubmitting ? 'Confirming...' : 'Submit Booking'}
+              </button>
             </form>
-            {status && <p style={{ marginTop: '1rem', color: '#046bd2' }}>{status}</p>}
             <button onClick={() => setIsOpen(false)} style={{ marginTop: '1rem', background: 'none', border: 'none', color: '#666', cursor: 'pointer', textDecoration: 'underline' }}>Cancel</button>
           </div>
         </div>
