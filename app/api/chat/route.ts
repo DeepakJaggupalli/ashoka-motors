@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       const vehicles = await prisma.vehicle.findMany();
       const inventoryContext = vehicles.map(v => `${v.name} (Type: ${v.type}, Price: ₹${v.price}) - ${v.specs}`).join('\n');
 
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+      const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
       const prompt = `You are the AI Sales Assistant for Ashoka Motors, a Yamaha dealership in Hyderabad. 
       Use the following LIVE INVENTORY DATA to accurately answer the user's question. 
       Do not hallucinate prices or models not listed here.

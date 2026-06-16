@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     const inventoryContext = vehicles.map(v => `${v.name} (Type: ${v.type}, Price: ₹${v.price}) - ${v.specs}`).join('\n');
 
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash-lite"
+      model: "gemini-flash-latest"
     });
 
     const prompt = `You are an expert motorcycle recommendation AI. 

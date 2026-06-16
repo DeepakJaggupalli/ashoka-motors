@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     if (genAI) {
       try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
         const prompt = `
           Analyze the sentiment and intent of the following message sent to a Yamaha motorcycle dealership.
           Respond with EXACTLY ONE WORD from the following list: [URGENT, COMPLAINT, POSITIVE, SALES, NEUTRAL].
