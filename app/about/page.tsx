@@ -1,7 +1,19 @@
 "use client";
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function About() {
+  const [showInterns, setShowInterns] = useState(false);
+
+  const interns = [
+    { name: "Deepak", roll: "2023000402" },
+    { name: "Arun", roll: "2023000230" },
+    { name: "Kritik", roll: "2023000357" },
+    { name: "Rishi", roll: "2023001672" },
+    { name: "Varsith", roll: "20230001825" },
+    { name: "Victor", roll: "2023000296" },
+  ];
+
   return (
     <main className="main-container" style={{ padding: '4rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <motion.div 
@@ -26,10 +38,46 @@ export default function About() {
           <li>Easy Financing Options</li>
         </ul>
 
+        {/* Team GITAM Interns Section */}
         <div style={{ marginTop: '3rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.1)', textAlign: 'center' }}>
-          <p style={{ fontSize: '1rem', color: 'var(--yamaha-cyan)', fontWeight: 600, letterSpacing: '0.5px' }}>
+          <button 
+            onClick={() => setShowInterns(!showInterns)}
+            style={{ 
+              background: 'transparent', border: 'none', cursor: 'pointer',
+              fontSize: '1.1rem', color: 'var(--yamaha-cyan)', fontWeight: 600, letterSpacing: '0.5px',
+              display: 'inline-flex', alignItems: 'center', gap: '8px'
+            }}
+          >
             Developed by Team GITAM Interns 🚀
-          </p>
+            <motion.span animate={{ rotate: showInterns ? 180 : 0 }} transition={{ duration: 0.3 }}>
+              ▼
+            </motion.span>
+          </button>
+
+          <AnimatePresence>
+            {showInterns && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.4 }}
+                style={{ overflow: 'hidden', marginTop: '1.5rem' }}
+              >
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  {interns.map((intern, idx) => (
+                    <motion.div 
+                      key={idx}
+                      initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: idx * 0.05 }}
+                      style={{ background: 'rgba(2, 6, 23, 0.6)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                    >
+                      <span style={{ color: 'white', fontWeight: 600, fontSize: '1.1rem' }}>{intern.name}</span>
+                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.3rem', fontFamily: 'monospace' }}>Roll: {intern.roll}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
     </main>
