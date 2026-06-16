@@ -39,6 +39,7 @@ export default function RootLayout({
                 <li><a href="/">Home</a></li>
                 <li><a href="/vehicles">Vehicles</a></li>
                 <li><a href="/about">About</a></li>
+                <li><a href="/ai-recommend" style={{ color: 'var(--yamaha-blue)', fontWeight: 'bold' }}>AI Recommend</a></li>
                 <li><a href="/contact">Contact</a></li>
                 <li><ThemeToggle /></li>
               </ul>

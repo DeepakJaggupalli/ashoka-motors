@@ -25,6 +25,7 @@ model ContactMessage {
   email     String
   message   String
   status    String   @default("PENDING")
+  sentiment String   @default("NEUTRAL")
   createdAt DateTime @default(now())
 }
 

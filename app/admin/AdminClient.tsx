@@ -105,8 +105,11 @@ export default function AdminClient({ initialBookings, initialMessages }: { init
                     <p><strong>{m.name}</strong> ({m.email})</p>
                     <p style={{ marginTop: '0.5rem', fontStyle: 'italic' }}>"{m.message}"</p>
                     <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.5rem' }}>Submitted: {new Date(m.createdAt).toLocaleString()}</p>
-                    <span style={{ display: 'inline-block', marginTop: '0.5rem', padding: '0.2rem 0.5rem', fontSize: '0.8rem', borderRadius: '4px', backgroundColor: m.status === 'REPLIED' ? '#dcfce7' : '#fef9c3', color: m.status === 'REPLIED' ? '#166534' : '#854d0e' }}>
+                    <span style={{ display: 'inline-block', marginTop: '0.5rem', marginRight: '0.5rem', padding: '0.2rem 0.5rem', fontSize: '0.8rem', borderRadius: '4px', backgroundColor: m.status === 'REPLIED' ? '#dcfce7' : '#fef9c3', color: m.status === 'REPLIED' ? '#166534' : '#854d0e' }}>
                       {m.status}
+                    </span>
+                    <span style={{ display: 'inline-block', marginTop: '0.5rem', padding: '0.2rem 0.5rem', fontSize: '0.8rem', borderRadius: '4px', backgroundColor: m.sentiment === 'URGENT' || m.sentiment === 'COMPLAINT' ? '#fee2e2' : m.sentiment === 'POSITIVE' || m.sentiment === 'SALES' ? '#dbeafe' : '#f1f5f9', color: m.sentiment === 'URGENT' || m.sentiment === 'COMPLAINT' ? '#991b1b' : m.sentiment === 'POSITIVE' || m.sentiment === 'SALES' ? '#1e40af' : '#475569' }}>
+                      {m.sentiment || 'NEUTRAL'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>

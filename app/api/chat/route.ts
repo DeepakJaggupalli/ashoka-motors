@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { PrismaClient } from '@prisma/client';
 
-// Initialize Gemini API if key is present
+const prisma = new PrismaClient();
 const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 
 export async function POST(req: Request) {
@@ -9,10 +10,20 @@ export async function POST(req: Request) {
     const { message } = await req.json();
     
     if (genAI) {
+      const vehicles = await prisma.vehicle.findMany();
+      const inventoryContext = vehicles.map(v => `${v.name} (Type: ${v.type}, Price: ₹${v.price}) - ${v.specs}`).join('\n');
+
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const prompt = `You are the AI assistant for Ashoka Motors, a Yamaha dealership in Hyderabad. 
-      Answer the following user query professionally and concisely, keeping answers under 3 sentences. 
-      User Query: ${message}`;
+      const prompt = `You are the AI Sales Assistant for Ashoka Motors, a Yamaha dealership in Hyderabad. 
+      Use the following LIVE INVENTORY DATA to accurately answer the user's question. 
+      Do not hallucinate prices or models not listed here.
+      
+      LIVE INVENTORY DATA:
+      ${inventoryContext}
+      
+      User Query: ${message}
+      
+      Answer professionally, enthusiastically, and concisely (under 3 sentences).`;
       
       const result = await model.generateContent(prompt);
       const response = await result.response;
